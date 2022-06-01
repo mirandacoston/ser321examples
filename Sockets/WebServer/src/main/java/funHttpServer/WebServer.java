@@ -225,7 +225,7 @@ class WebServer {
 			String owner_login = arr.getJSONObject(i).getJSONObject("owner").getString("login");
 			Integer id = Integer.parseInt(arr.getJSONObject(i).getString("id"));
 			System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
-			if(full_name.isEmpty() || owner_login.isEmpty() || id.isEmpty()){
+			if(full_name.isEmpty() || owner_login.isEmpty() || id==0){
 				builder.append("HTTP/1.1 400 Bad Request\n");
 				builder.append("Content-Type: text/html; charset=utf-8\n");
 				builder.append("\n");
