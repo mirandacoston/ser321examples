@@ -25,6 +25,7 @@ import java.util.Random;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
+import org.json.*
 
 class WebServer {
   public static void main(String args[]) {
@@ -177,10 +178,12 @@ class WebServer {
           // extract path parameters
           query_pairs = splitQuery(request.replace("multiply?", ""));
           // extract required fields from parameters
-          Integer num1 = 0;
-		  num1 = Integer.parseInt(query_pairs.get("num1"));
-          Integer num2 = 0;
-		  num2 = Integer.parseInt(query_pairs.get("num2"));
+	  try {
+          Integer num1 = Integer.parseInt(query_pairs.get("num1"));
+          Integer num2 = Integer.parseInt(query_pairs.get("num2"));
+	  } catch (Exception e) {
+	  System.out.println("Either one of those isn't a number, or you only have one number. Do over!");
+	  }
           // do math
           Integer result = num1 * num2;
           // Generate response
@@ -188,16 +191,14 @@ class WebServer {
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
           builder.append("Result is: " + result);		  
-		  if (result == 0){
-			builder.append("HTTP/1.1 400 Bad Request\n");
-			builder.append("Content-Type: text/html; Filled with tomfoolery.");
-			builder.append("\n");
-			builder.append("no multiplying by zero and or no multiplying with a single number entry. you silly goose.");
-		}
-
+	  if (result == 0){
+		builder.append("HTTP/1.1 400 Bad Request\n");
+		builder.append("Content-Type: text/html; Filled with tomfoolery.");
+		builder.append("\n");
+		builder.append("no multiplying by zero and or no multiplying with a single number entry. you silly goose.");
+	 }
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
-
         } else if (request.contains("github?")) {
           // pulls the query from the request and runs it with GitHub's REST API
           // check out https://docs.github.com/rest/reference/
@@ -224,22 +225,22 @@ class WebServer {
 			String owner_login = arr.getJSONObject(i).getJSONObject("owner").getString("login");
 			Integer id = Integer.parseInt(arr.getJSONObject(i).getString("id"));
 			System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
-			if(full_name == NULL || owner_login == NULL || id == NULL){
+			if(full_name.isEmpty() || owner_login.isEmpty() || id.isEmpty()){
 				builder.append("HTTP/1.1 400 Bad Request\n");
 				builder.append("Content-Type: text/html; charset=utf-8\n");
 				builder.append("\n");
 				System.out.println("Oops. Looks like we're missing something. Please try again!");
 			}
 		  }
-		} else if (request.contains("bestpet?")) {  
-		  //pulls a query from the request and pulls a google image of the querent's best animal opinion
-		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-		  query_pairs = splitQuery(request.replace("bestpet?", ""));
-		  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
-		  String query = query_pairs.get("query");
-		  query = query.toUpperCase();
-		  String compare = "CATS";
-		  String comparep = "CAT";
+	} else if (request.contains("bestpet?")) {  
+	  //pulls a query from the request and pulls a google image of the querent's best animal opinion
+	  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+	  query_pairs = splitQuery(request.replace("bestpet?", ""));
+	  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
+	  String query = query_pairs.get("query");
+	  query = query.toUpperCase();
+	  String compare = "CATS";
+	  String comparep = "CAT";
 		  if (query.equals(compare) || query.equals(comparep)){
 			System.out.println("You have AMAZING taste and are so correct!");
 			builder.append("HTTP/1.1 200 OK\n");
@@ -254,26 +255,25 @@ class WebServer {
 			builder.append("Check the todos mentioned in the Java source file");
 		  } else {			  
 		  String animal = "https://pethelpful.com/cats/10-Reasons-Why-Cats-are-the-Best-Pets";
-			System.out.println("Whoa there. Here's a helpful article to help you with your opinion. Take a look and try again :) " + animal);
-		  }  
-		} else if (request.contains("music?")) {
-		 //pulls a query from the request and pulls a google image of the querent's best animal opinion
-		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-		  query_pairs = splitQuery(request.replace("music?", ""));
-		  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
-		  String query = query_pairs.get("query");
-		  query = query.toUpperCase();
+		System.out.println("Whoa there. Here's a helpful article to help you with your opinion. Take a look and try again :) " + animal);
+	  	}  
+	} else if (request.contains("music?")) {
+	 //pulls a query from the request and pulls a google image of the querent's best animal opinion
+	  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+	  query_pairs = splitQuery(request.replace("music?", ""));
+	  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
+	  String query = query_pairs.get("query");
+	  query = query.toUpperCase();
 		  if(query.contains("music")) {
 			System.out.println("Voila. Sick tunes. https://youtu.be/dQw4w9WgXcQ");
 		  } else {
 		  builder.append("HTTP/1.1 413 I'm a teapot\n");
-          builder.append("Content-Type: text/html; charset=utf-8\n");
-          builder.append("\n");
-          builder.append("I am not sure what you want me to do...");
+         	  builder.append("Content-Type: text/html; charset=utf-8\n");
+          	  builder.append("\n");
+         	  builder.append("I am not sure what you want me to do...");
 		  }		
-		} else {
+	} else {
           // if the request is not recognized at all
-
           builder.append("HTTP/1.1 400 Bad Request\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
@@ -286,7 +286,6 @@ class WebServer {
       e.printStackTrace();
       response = ("<html>ERROR: " + e.getMessage() + "</html>").getBytes();
     }
-
     return response;
   }
 
