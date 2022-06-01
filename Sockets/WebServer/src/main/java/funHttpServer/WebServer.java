@@ -86,27 +86,19 @@ class WebServer {
    * @return the byte encoded HTTP response
    */
   public byte[] createResponse(InputStream inStream) {
-
     byte[] response = null;
     BufferedReader in = null;
-
     try {
-
       // Read from socket's input stream. Must use an
       // InputStreamReader to bridge from streams to a reader
       in = new BufferedReader(new InputStreamReader(inStream, "UTF-8"));
-
       // Get header and save the request from the GET line:
       // example GET format: GET /index.html HTTP/1.1
-
       String request = null;
-
       boolean done = false;
       while (!done) {
         String line = in.readLine();
-
         System.out.println("Received: " + line);
-
         // find end of header("\n\n")
         if (line == null || line.equals(""))
           done = true;
@@ -118,10 +110,8 @@ class WebServer {
           // extract the request, basically everything after the GET up to HTTP/1.1
           request = line.substring(firstSpace + 2, secondSpace);
         }
-
       }
       System.out.println("FINISHED PARSING HEADER\n");
-
       // Generate an appropriate response to the user
       if (request == null) {
         response = "<html>Illegal request: no GET</html>".getBytes();
@@ -129,31 +119,24 @@ class WebServer {
         // create output buffer
         StringBuilder builder = new StringBuilder();
         // NOTE: output from buffer is at the end
-
         if (request.length() == 0) {
           // shows the default directory page
-
           // opens the root.html file
           String page = new String(readFileInBytes(new File("www/root.html")));
           // performs a template replacement in the page
           page = page.replace("${links}", buildFileList());
-
           // Generate response
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
           builder.append(page);
-
         } else if (request.equalsIgnoreCase("json")) {
           // shows the JSON of a random image and sets the header name for that image
-
           // pick a index from the map
           int index = random.nextInt(_images.size());
-
           // pull out the information
           String header = (String) _images.keySet().toArray()[index];
           String url = _images.get(header);
-
           // Generate response
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: application/json; charset=utf-8\n");
@@ -162,25 +145,19 @@ class WebServer {
           builder.append("\"header\":\"").append(header).append("\",");
           builder.append("\"image\":\"").append(url).append("\"");
           builder.append("}");
-
         } else if (request.equalsIgnoreCase("random")) {
-          // opens the random image page
-
+			// opens the random image page
           // open the index.html
           File file = new File("www/index.html");
-
           // Generate response
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
           builder.append(new String(readFileInBytes(file)));
-
         } else if (request.contains("file/")) {
           // tries to find the specified file and shows it or shows an error
-
           // take the path and clean it. try to open the file
           File file = new File(request.replace("file/", ""));
-
           // Generate response
           if (file.exists()) { // success
             builder.append("HTTP/1.1 200 OK\n");
@@ -196,23 +173,27 @@ class WebServer {
         } else if (request.contains("multiply?")) {
           // This multiplies two numbers, there is NO error handling, so when
           // wrong data is given this just crashes
-
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           // extract path parameters
           query_pairs = splitQuery(request.replace("multiply?", ""));
-
           // extract required fields from parameters
-          Integer num1 = Integer.parseInt(query_pairs.get("num1"));
-          Integer num2 = Integer.parseInt(query_pairs.get("num2"));
-
+          Integer num1 = 0;
+		  num1 = Integer.parseInt(query_pairs.get("num1"));
+          Integer num2 = 0;
+		  num2 = Integer.parseInt(query_pairs.get("num2"));
           // do math
           Integer result = num1 * num2;
-
           // Generate response
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
-          builder.append("Result is: " + result);
+          builder.append("Result is: " + result);		  
+		  if (result == 0){
+			builder.append("HTTP/1.1 400 Bad Request\n");
+			builder.append("Content-Type: text/html; Filled with tomfoolery.");
+			builder.append("\n");
+			builder.append("no multiplying by zero and or no multiplying with a single number entry. you silly goose.");
+		}
 
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
@@ -228,17 +209,69 @@ class WebServer {
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
-          String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+          String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));		  
           System.out.println(json);
 
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
-          builder.append("Check the todos mentioned in the Java source file");
-          // TODO: Parse the JSON returned by your fetch and create an appropriate
+          builder.append("Check the todos mentioned in the Java source file");  
+		  // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
-
-        } else {
+		  JSONArray arr = new JSONarray(json);
+		  for ( int i=0; i<arr.length(); i++){
+			String full_name = arr.getJSONObject(i).getString("full_name");
+			String owner_login = arr.getJSONObject(i).getJSONObject("owner").getString("login");
+			Integer id = Integer.parseInt(arr.getJSONObject(i).getString("id");
+			System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
+			if(full_name == NULL || owner_login == NULL || id == NULL){
+				builder.append("HTTP/1.1 400 Bad Request\n");
+				builder.append("Content-Type: text/html; charset=utf-8\n");
+				builder.append("\n")
+				System.out.println("Oops. Looks like we're missing something. Please try again!")
+			}
+		  }
+		} else if {request.contains("bestpet?")) {  
+		  //pulls a query from the request and pulls a google image of the querent's best animal opinion
+		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+		  query_pairs = splitQuery(request.replace("bestpet?", ""));
+		  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
+		  query = query_pairs.get("query");
+		  query = query.toUpperCase();
+		  String compare = "CATS";
+		  String comparep = "CAT";
+		  if (query.equals(compare) || query.equals(comparep)){
+			System.out.println("You have AMAZING taste and are so correct!");
+			builder.append("HTTP/1.1 200 OK\n");
+			builder.append("Content-Type: text/html; charset=utf-8\n");
+			builder.append("\n");
+			builder.append("Check the todos mentioned in the Java source file");
+		  } else if (query.contains("CATS") || query.contains("CAT")){
+			System.out.println("You've got the right answer in there. You're so close. I swear it.");
+			builder.append("HTTP/1.1 200 OK\n");
+			builder.append("Content-Type: text/html; charset=utf-8\n");
+			builder.append("\n");
+			builder.append("Check the todos mentioned in the Java source file");
+		  } else {			  
+		  String animal = "https://pethelpful.com/cats/10-Reasons-Why-Cats-are-the-Best-Pets";
+			System.out.println("Whoa there. Here's a helpful article to help you with your opinion. Take a look and try again :) " + animal);
+		  }  
+		} else if {
+		 //pulls a query from the request and pulls a google image of the querent's best animal opinion
+		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+		  query_pairs = splitQuery(request.replace("bestpet?", ""));
+		  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
+		  query = query_pairs.get("query");
+		  query = query.toUpperCase();
+		  if(query.contains("music") {
+			System.out.println("Voila. Sick tunes. https://youtu.be/dQw4w9WgXcQ");
+		  } else {
+		  builder.append("HTTP/1.1 413 I'm a teapot\n");
+          builder.append("Content-Type: text/html; charset=utf-8\n");
+          builder.append("\n");
+          builder.append("I am not sure what you want me to do...");
+		  }		
+		} else {
           // if the request is not recognized at all
 
           builder.append("HTTP/1.1 400 Bad Request\n");
@@ -246,7 +279,6 @@ class WebServer {
           builder.append("\n");
           builder.append("I am not sure what you want me to do...");
         }
-
         // Output
         response = builder.toString().getBytes();
       }
