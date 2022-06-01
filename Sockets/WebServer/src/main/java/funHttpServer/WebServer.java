@@ -226,13 +226,12 @@ class WebServer {
           builder.append("\n");
           builder.append("Check the todos mentioned in the Java source file");  
 		  // TODO: Parse the JSON returned by your fetch and create an appropriate
-          // response based on what the assignment document asks for
-	 JSONObject intermedi = new JSONObject(json);	
-	 JSONArray arr = json.getJSONArray("id");	
-	 for ( int i=0; i<arr.length(); i++){
-		String full_name = arr.getJSONObject(i).getString("full_name");
-		String owner_login = arr.getJSONObject(i).getJSONObject("owner").getString("login");
-		Integer id = Integer.parseInt(arr.getString("id"));
+          // response based on what the assignment document asks for	 	
+	 //JSONArray arr = json.getJSONArray("id");	
+	 for ( int i=0; i<json.length(); i++){
+		String full_name = json.getJSONObject(i).getString("full_name");
+		String owner_login = json.getJSONObject(i).getJSONObject("owner").getString("login");
+		Integer id = Integer.parseInt(json.getString("id"));
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
 		if(full_name.isEmpty() || owner_login.isEmpty() || id==0){
 			builder.append("HTTP/1.1 400 Bad Request\n");
