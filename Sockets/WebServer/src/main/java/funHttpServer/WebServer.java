@@ -25,7 +25,10 @@ import java.util.Random;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
-import org.json.*;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser;
 
 class WebServer {
   public static void main(String args[]) {
