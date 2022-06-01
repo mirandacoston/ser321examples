@@ -227,19 +227,20 @@ class WebServer {
           builder.append("Check the todos mentioned in the Java source file");  
 		  // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
-		  JSONArray arr = new JSONArray(json);
-		  for ( int i=0; i<arr.length(); i++){
-			String full_name = arr.getJSONObject(i).getString("full_name");
-			String owner_login = arr.getJSONObject(i).getJSONObject("owner").getString("login");
-			Integer id = Integer.parseInt(arr.getJSONObject(i).getString("id"));
-			System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
-			if(full_name.isEmpty() || owner_login.isEmpty() || id==0){
-				builder.append("HTTP/1.1 400 Bad Request\n");
-				builder.append("Content-Type: text/html; charset=utf-8\n");
-				builder.append("\n");
-				System.out.println("Oops. Looks like we're missing something. Please try again!");
-			}
-		  }
+	 JSONObject intermedi = new JSONObject(json);	
+	 JSONArray arr = json.getJSONArray("id");	
+	 for ( int i=0; i<arr.length(); i++){
+		String full_name = arr.getJSONObject(i).getString("full_name");
+		String owner_login = arr.getJSONObject(i).getJSONObject("owner").getString("login");
+		Integer id = Integer.parseInt(arr.getString("id"));
+		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
+		if(full_name.isEmpty() || owner_login.isEmpty() || id==0){
+			builder.append("HTTP/1.1 400 Bad Request\n");
+			builder.append("Content-Type: text/html; charset=utf-8\n");
+			builder.append("\n");
+			System.out.println("Oops. Looks like we're missing something. Please try again!");
+		}
+	  }
 	} else if (request.contains("bestpet?")) {  
 	  //pulls a query from the request and pulls a google image of the querent's best animal opinion
 	  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
