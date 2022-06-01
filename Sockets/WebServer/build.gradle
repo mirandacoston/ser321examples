@@ -10,6 +10,7 @@ repositories {
 
 dependencies{
   compile 'org.json:json:20171018' // org.json
+  compile 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 task SimpleWebServer(type: JavaExec) {
