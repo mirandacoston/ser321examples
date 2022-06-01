@@ -29,6 +29,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser*;
+import org.json.*;
 
 class WebServer {
   public static void main(String args[]) {
@@ -181,12 +183,15 @@ class WebServer {
           // extract path parameters
           query_pairs = splitQuery(request.replace("multiply?", ""));
           // extract required fields from parameters
-	  try {
+	  if(query_pairs.size() <2) {
+		builder.append("HTTP/1.1 400 Bad Request\n");
+		builder.append("Content-Type: text/html; Filled with tomfoolery.");
+		builder.append("\n");
+		builder.append("no multiplying by zero and or no multiplying with a single number entry. you silly goose.");
+	  }
           Integer num1 = Integer.parseInt(query_pairs.get("num1"));
           Integer num2 = Integer.parseInt(query_pairs.get("num2"));
-	  } catch (Exception e) {
-	  System.out.println("Either one of those isn't a number, or you only have one number. Do over!");
-	  }
+	  
           // do math
           Integer result = num1 * num2;
           // Generate response
