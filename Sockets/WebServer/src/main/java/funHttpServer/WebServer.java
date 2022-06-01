@@ -222,16 +222,16 @@ class WebServer {
 		  for ( int i=0; i<arr.length(); i++){
 			String full_name = arr.getJSONObject(i).getString("full_name");
 			String owner_login = arr.getJSONObject(i).getJSONObject("owner").getString("login");
-			Integer id = Integer.parseInt(arr.getJSONObject(i).getString("id");
+			Integer id = Integer.parseInt(arr.getJSONObject(i).getString("id"));
 			System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
 			if(full_name == NULL || owner_login == NULL || id == NULL){
 				builder.append("HTTP/1.1 400 Bad Request\n");
 				builder.append("Content-Type: text/html; charset=utf-8\n");
-				builder.append("\n")
-				System.out.println("Oops. Looks like we're missing something. Please try again!")
+				builder.append("\n");
+				System.out.println("Oops. Looks like we're missing something. Please try again!");
 			}
 		  }
-		} else if {request.contains("bestpet?")) {  
+		} else if (request.contains("bestpet?")) {  
 		  //pulls a query from the request and pulls a google image of the querent's best animal opinion
 		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
 		  query_pairs = splitQuery(request.replace("bestpet?", ""));
@@ -256,14 +256,14 @@ class WebServer {
 		  String animal = "https://pethelpful.com/cats/10-Reasons-Why-Cats-are-the-Best-Pets";
 			System.out.println("Whoa there. Here's a helpful article to help you with your opinion. Take a look and try again :) " + animal);
 		  }  
-		} else if {
+		} else if (request.contains("music?")) {
 		 //pulls a query from the request and pulls a google image of the querent's best animal opinion
 		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-		  query_pairs = splitQuery(request.replace("bestpet?", ""));
+		  query_pairs = splitQuery(request.replace("music?", ""));
 		  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
 		  query = query_pairs.get("query");
 		  query = query.toUpperCase();
-		  if(query.contains("music") {
+		  if(query.contains("music")) {
 			System.out.println("Voila. Sick tunes. https://youtu.be/dQw4w9WgXcQ");
 		  } else {
 		  builder.append("HTTP/1.1 413 I'm a teapot\n");
