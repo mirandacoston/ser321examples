@@ -227,9 +227,13 @@ class WebServer {
           builder.append("Check the todos mentioned in the Java source file");  
 		  // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for	 	
-	 //JSONArray arr = json.getJSONArray("id");	
-	 for ( int i=0; i<json.length(); i++){
-		String full_name = json.getJSONObject(i).getString("full_name");
+	 //JSONArray arr = json.getJSONArray("id");
+	 Object obj = new JSONParser().parse(json);	
+	 JSONObject repos = (JSONObject) obj;		
+	 JSONArray repoarray = (JSONArray) repos.getJSONArray("ids");
+		
+	 for ( int i=0; i<repoarray.length(); i++){
+		String full_name = repoarray.getJSONObject(i).getString("full_name");
 		String owner_login = json.getJSONObject(i).getJSONObject("owner").getString("login");
 		Integer id = Integer.parseInt(json.getString("id"));
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
