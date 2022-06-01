@@ -236,7 +236,7 @@ class WebServer {
 		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
 		  query_pairs = splitQuery(request.replace("bestpet?", ""));
 		  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
-		  query = query_pairs.get("query");
+		  String query = query_pairs.get("query");
 		  query = query.toUpperCase();
 		  String compare = "CATS";
 		  String comparep = "CAT";
@@ -261,7 +261,7 @@ class WebServer {
 		  Map<String, String> query_pairs = new LinkedHashMap<String, String>();
 		  query_pairs = splitQuery(request.replace("music?", ""));
 		  //String[] pairs = query.split("\\s*[^a-zA-Z]+\\s*");
-		  query = query_pairs.get("query");
+		  String query = query_pairs.get("query");
 		  query = query.toUpperCase();
 		  if(query.contains("music")) {
 			System.out.println("Voila. Sick tunes. https://youtu.be/dQw4w9WgXcQ");
