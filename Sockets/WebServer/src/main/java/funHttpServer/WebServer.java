@@ -224,20 +224,15 @@ class WebServer {
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
           builder.append("Check the todos mentioned in the Java source file");  
-		  // TODO: Parse the JSON returned by your fetch and create an appropriate
-          // response based on what the assignment document asks for	 	
-	 //JSONArray arr = json.getJSONArray("id");
-	 JSONArray arr = new JSONArray(json);		
-	// Object obj = new JSONParser().parse(json);	
-	// JSONObject repos = (JSONObject) obj;		
-	 //JSONArray repoarray = (JSONArray) repos.getJSONArray("ids");
-	 //int l = Object.keys(repoarray).length();
+
+	 JSONObject newObject = new JSONObject(json);
+	 JSONArray arr = new JSONArray(json);	
+	 JSONArray logins = arr.getJSONArray("owner");
+	 for ( int i=0; i < arr.length ; i++) {	
+		String id = arr.getJSONObject(i).getString("id");
+		String full_name = arr.getJSONObject(i).getString("full_name");		 
+		String owner_login = logins.getJSONObject(i).getString("login");	 
 		
-	 for ( int i=0; i < arr.length ; i++){
-		JSONObject repo = arr.getJSONObject(i);		 
-		String full_name = repo.getString("full_name");		 
-		String owner_login = repo.getJSONObject("owner").getString("login");		 
-		String id = repo.getString("id");
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
 		if(full_name.isEmpty() || owner_login.isEmpty() || id.isEmpty() ) {
 			builder.append("HTTP/1.1 400 Bad Request\n");
