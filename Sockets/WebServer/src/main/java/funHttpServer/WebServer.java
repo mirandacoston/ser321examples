@@ -232,12 +232,12 @@ class WebServer {
 	 JSONObject repos = (JSONObject) obj;		
 	 //JSONArray repoarray = (JSONArray) repos.getJSONArray("ids");
 	 //int l = Object.keys(repoarray).length();	
-	 for ( int i=0; i < repos.length ; i++){
-		String full_name = repos.getJSONObject(i).getString("full_name");
-		String owner_login = repos.getJSONObject(i).getJSONObject("owner").getString("login");
-		Integer id = Integer.parseInt(repos.getString("id"));
+	 for ( int i=0; i < Object.keys(repos).length ; i++){
+		String full_name = repos.getString("full_name");
+		String owner_login = repos.getJSONObject("owner").getString("login");
+		String id = (repos.getString("id");
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
-		if(full_name.isEmpty() || owner_login.isEmpty() || id==0){
+		if(full_name.isEmpty() || owner_login.isEmpty() || id.isEmpty() ) {
 			builder.append("HTTP/1.1 400 Bad Request\n");
 			builder.append("Content-Type: text/html; charset=utf-8\n");
 			builder.append("\n");
