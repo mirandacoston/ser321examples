@@ -226,9 +226,9 @@ class WebServer {
           builder.append("Check the todos mentioned in the Java source file");  
 
 	 JSONObject newObject = new JSONObject(json);
-	 JSONArray arr = new JSONArray(json);	
-	 JSONArray logins = arr.getJSONArray("owner");
-	 for ( int i=0; i < arr.length ; i++) {	
+	 JSONArray arr = new JSONArray(json);
+	JSONArray logins = newObject.getJSONArray("owner");
+	 for ( int i=0; i < arr.length() ; i++) {	
 		String id = arr.getJSONObject(i).getString("id");
 		String full_name = arr.getJSONObject(i).getString("full_name");		 
 		String owner_login = logins.getJSONObject(i).getString("login");	 
