@@ -85,7 +85,6 @@ class WebServer {
   };
 
   private Random random = new Random();
-
   /**
    * Reads in socket stream and generates a response
    * @param inStream HTTP input stream from socket
@@ -228,14 +227,17 @@ class WebServer {
 		  // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for	 	
 	 //JSONArray arr = json.getJSONArray("id");
-	 Object obj = new JSONParser().parse(json);	
-	 JSONObject repos = (JSONObject) obj;		
+	 JSONArray arr = new JSONArray(json);		
+	// Object obj = new JSONParser().parse(json);	
+	// JSONObject repos = (JSONObject) obj;		
 	 //JSONArray repoarray = (JSONArray) repos.getJSONArray("ids");
-	 //int l = Object.keys(repoarray).length();	
-	 for ( int i=0; i < Object.keys(repos).length ; i++){
-		String full_name = repos.getString("full_name");
-		String owner_login = repos.getJSONObject("owner").getString("login");
-		String id = repos.getString("id");
+	 //int l = Object.keys(repoarray).length();
+		
+	 for ( int i=0; i < arr.length ; i++){
+		JSONObject repo = arr.getJSONObject(i);		 
+		String full_name = arr.getString("full_name");		 
+		String owner_login = arr.getJSONObject("owner").getString("login");		 
+		String id = arr.getString("id");
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
 		if(full_name.isEmpty() || owner_login.isEmpty() || id.isEmpty() ) {
 			builder.append("HTTP/1.1 400 Bad Request\n");
