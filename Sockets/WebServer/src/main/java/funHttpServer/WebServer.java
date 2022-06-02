@@ -235,9 +235,9 @@ class WebServer {
 		
 	 for ( int i=0; i < arr.length ; i++){
 		JSONObject repo = arr.getJSONObject(i);		 
-		String full_name = arr.getString("full_name");		 
-		String owner_login = arr.getJSONObject("owner").getString("login");		 
-		String id = arr.getString("id");
+		String full_name = repo.getString("full_name");		 
+		String owner_login = repo.getJSONObject("owner").getString("login");		 
+		String id = repo.getString("id");
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
 		if(full_name.isEmpty() || owner_login.isEmpty() || id.isEmpty() ) {
 			builder.append("HTTP/1.1 400 Bad Request\n");
