@@ -230,12 +230,12 @@ class WebServer {
 	 //JSONArray arr = json.getJSONArray("id");
 	 Object obj = new JSONParser().parse(json);	
 	 JSONObject repos = (JSONObject) obj;		
-	 JSONArray repoarray = (JSONArray) repos.getJSONArray("ids");
-		
-	 for ( int i=0; i<repoarray.length(); i++){
-		String full_name = repoarray.getJSONObject(i).getString("full_name");
-		String owner_login = json.getJSONObject(i).getJSONObject("owner").getString("login");
-		Integer id = Integer.parseInt(json.getString("id"));
+	 //JSONArray repoarray = (JSONArray) repos.getJSONArray("ids");
+	 //int l = Object.keys(repoarray).length();	
+	 for ( int i=0; i < repos.length ; i++){
+		String full_name = repos.getJSONObject(i).getString("full_name");
+		String owner_login = repos.getJSONObject(i).getJSONObject("owner").getString("login");
+		Integer id = Integer.parseInt(repos.getString("id"));
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
 		if(full_name.isEmpty() || owner_login.isEmpty() || id==0){
 			builder.append("HTTP/1.1 400 Bad Request\n");
