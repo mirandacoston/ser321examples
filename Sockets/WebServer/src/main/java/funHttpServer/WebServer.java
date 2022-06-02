@@ -235,7 +235,7 @@ class WebServer {
 	 for ( int i=0; i < Object.keys(repos).length ; i++){
 		String full_name = repos.getString("full_name");
 		String owner_login = repos.getJSONObject("owner").getString("login");
-		String id = (repos.getString("id");
+		String id = repos.getString("id");
 		System.out.println("full_name: " + full_name + "owner: " + owner_login + "id: " + id);
 		if(full_name.isEmpty() || owner_login.isEmpty() || id.isEmpty() ) {
 			builder.append("HTTP/1.1 400 Bad Request\n");
